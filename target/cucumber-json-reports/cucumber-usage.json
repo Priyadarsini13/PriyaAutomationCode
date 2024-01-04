@@ -1,0 +1,56 @@
+[
+  {
+    "source": "User visits e-commerce website",
+    "steps": [
+      {
+        "name": "User visits e-commerce website",
+        "aggregatedDurations": {
+          "median": 0.0049983,
+          "average": 0.0049983
+        },
+        "durations": [
+          {
+            "duration": 0.0049983,
+            "location": "file:///E:/AutomationFramework/CucumberJava/src/test/java/com/automation/features/Login.feature:5"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "User enters valid credentials",
+    "steps": [
+      {
+        "name": "User enters valid credentials",
+        "aggregatedDurations": {
+          "median": 0.0019983,
+          "average": 0.0019983
+        },
+        "durations": [
+          {
+            "duration": 0.0019983,
+            "location": "file:///E:/AutomationFramework/CucumberJava/src/test/java/com/automation/features/Login.feature:6"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "User can logged in successfully",
+    "steps": [
+      {
+        "name": "User can logged in successfully",
+        "aggregatedDurations": {
+          "median": 0.0019987,
+          "average": 0.0019987
+        },
+        "durations": [
+          {
+            "duration": 0.0019987,
+            "location": "file:///E:/AutomationFramework/CucumberJava/src/test/java/com/automation/features/Login.feature:7"
+          }
+        ]
+      }
+    ]
+  }
+]

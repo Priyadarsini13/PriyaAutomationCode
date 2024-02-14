@@ -1,4 +1,4 @@
-package com.automationn.stepdefination;
+package com.automation.utils;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;

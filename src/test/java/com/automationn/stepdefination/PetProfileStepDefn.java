@@ -10,7 +10,7 @@ import org.testng.asserts.SoftAssert;
 
 import com.automation.pojo.pet.PetAPIResponse;
 import com.automation.pojo.pet.PetInfo;
-
+import com.automation.utils.PetAPISteps;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;

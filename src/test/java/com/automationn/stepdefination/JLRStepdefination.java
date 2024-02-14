@@ -24,7 +24,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class JLRStepdefination {
-	//WebDriver driver = new ChromeDriver();
 	WebDriver driver ;
 	public static ExtentTest logger;
 

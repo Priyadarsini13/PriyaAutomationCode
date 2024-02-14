@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -23,7 +24,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class JLRStepdefination {
-	WebDriver driver = new ChromeDriver();
+	//WebDriver driver = new ChromeDriver();
+	WebDriver driver ;
 	public static ExtentTest logger;
 
 	@Given("User is navigate to JLR home page sucessfully")
@@ -31,7 +33,7 @@ public class JLRStepdefination {
 		lunchHomePage();
 	}
 
-	@Given("User click on {string} tab")
+	@When("User click on {string} tab")
 	public void clickCompanyMenu(String menuItem) {
 		
 		try {
@@ -43,11 +45,9 @@ public class JLRStepdefination {
 			if(e.getText().equalsIgnoreCase(menuItem))
 				e.click();
 		}
-		logger.log(Status.INFO, "Clicked"+menuItem);
 		}
 		catch(Exception e)
 		{
-			logger.log(Status.FAIL, "Unable to click item: " + e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -64,12 +64,11 @@ public class JLRStepdefination {
 			//Check the condition
 			if(e.getText().equalsIgnoreCase(subMenuItem))
 				e.click();
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		}
-		logger.log(Status.INFO, "Clicked"+subMenuItem);
 		}
 		catch(Exception e)
 		{
-			logger.log(Status.FAIL, "Unable to click item: " + e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -83,11 +82,10 @@ public class JLRStepdefination {
 		getTextofelement(driver,menuTitle);
 		String ActualTitle = getTextofelement(driver,menuTitle);	
 		Assert.assertEquals(ActualTitle, subMenuTitle);
-		cleanUp();
+		
 		}
 		catch(Exception e)
 		{
-			logger.log(Status.FAIL, "Unable to verify SubMenu: " + e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -99,17 +97,19 @@ public class JLRStepdefination {
 		clickItem(driver,searchBar);
 	}
 
+
 	@When("User enter the search keyword {string}")
 	public void searchkeyword(String SearchText) {
 		try
 		{
+			System.out.println("search ............"+SearchText);
 		WebElement searchtextField=driver.findElement(By.xpath("//li[@class='desktop-search__search']//input[@type='search']"));
-		WebElement searchResult=driver.findElement(By.xpath("//a[text()='Accessories']"));
 		enterText(driver,searchtextField,SearchText);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		WebElement searchResult=driver.findElement(By.xpath("//a[@class='navigation-search-list__link']"));
 		clickItem(driver,searchResult);
 		}catch(Exception e)
 		{
-			logger.log(Status.FAIL, "Unable to search item: " + e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -117,15 +117,57 @@ public class JLRStepdefination {
 
 	@Then("User should sucessfully serch the product")
 	public void user_should_sucessfully_serch_the_produc() {
+		try
+		{
+			WebElement searchResultTitle=driver.findElement(By.xpath("//h1[@class='page-title text-center light-font']"));
+			Assert.assertTrue(waitfForElement(driver, searchResultTitle));		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}	
 		
 	}
 	
+	@Given("User navigate to news section")
+	public void user_click_on_Diversity_and_Inclusion_approach() {
+		try
+		{
+		WebElement latestNews=driver.findElement(By.xpath("//h3[text()='Latest News']"));
+		scrollToElement(driver,latestNews);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 
+	@When("User click on news")
+	public void newsButton() {
+		try
+		{
+			WebElement latestNews=driver.findElement(By.xpath("//h3[text()='Latest News']"));
+			clickItem(driver,latestNews);
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Then("User should sucessfully open news")
+	public void user_should_sucessfully_download() {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
 	public void lunchHomePage() {
 		try {
 			System.setProperty("webdriver.chrome.driver",
 					"C:\\Users\\Priya\\LocalGit\\BareGitRepo\\CucumberJava\\src\\test\\resources\\driver\\chromedriver.exe");
-			// driver = new ChromeDriver();
+			 driver = new ChromeDriver();
 			//Maximize the window
 			driver.manage().window().maximize();
 			//Implicitly wait
@@ -146,7 +188,7 @@ public class JLRStepdefination {
 			ele.click();
 			return true;
 		} catch (Exception e) {
-			logger.log(Status.FAIL, "Unable to click item: " + e.getMessage());
+			
 			e.printStackTrace();
 			return false;
 		}
@@ -163,12 +205,12 @@ public class JLRStepdefination {
 		}
 		catch(Exception e)
 		{
-			logger.log(Status.FAIL, "Unable to get Text from element. "+e.getMessage());
+			System.out.println(e);
 			return null;
 		}
 	}
 	
-	public static Boolean enterText(WebDriver driver, WebElement ele,String text) throws AssertionError
+	public static Boolean enterText(WebDriver driver, WebElement ele,String text) 
 	{
 		try
 		{
@@ -180,13 +222,49 @@ public class JLRStepdefination {
 		}
 		catch(Exception e)
 		{
-			logger.log(Status.FAIL, "Unable to enter text: "+e.getMessage());
+
+			e.printStackTrace();
 			return false;
 		}
 		
 	}
-	 
+	
+	public static void scrollToElement(WebDriver driver,WebElement ele) 
+	{
+		try
+		{
+
+			WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(50));
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", ele);
+			Thread.sleep(500);
+			
+		}
+		catch(Exception e)
+		{
+
+			e.printStackTrace();
+			
+		}
+		 
+	}
+	public static Boolean waitfForElement(WebDriver driver, WebElement ele)
+	{
+		try
+		{
+			WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(50));
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			return true;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	@After
 	public void cleanUp(){    
-	      driver.close(); 
+		driver.quit();
 	}
 }

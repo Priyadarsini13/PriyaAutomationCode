@@ -6,27 +6,30 @@ import java.util.Map;
 
 //import org.assertj.core.api.SoftAssertions;
 import org.junit.Assert;
-
 import com.automation.pojo.pet.Category;
 import com.automation.pojo.pet.PetAPIResponse;
 import com.automation.pojo.pet.PetInfo;
 import com.automation.pojo.pet.Tag;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-//import net.thucydides.core.annotations.Step;
 
 public class PetAPISteps {
 
 	public PetInfo createPetClass(Map<String, String> petData) {
+		
+		 
+		List<Category> cate = new ArrayList<>();
 		Category category = new Category(Integer.parseInt(petData.get("categoryId")),petData.get("categoryName"));
+		cate.add(category);
 		List<String> photoUrls = new ArrayList<>();
 		photoUrls.add(petData.get("photoUrls"));
 		List<Tag> tags = new ArrayList<>();
 		Tag tagData = new Tag(Integer.parseInt(petData.get("tagsId")),petData.get("tagsName"));
 		tags.add(tagData);
 		PetInfo petInfo = new PetInfo(Integer.parseInt(petData.get("petId")),category,petData.get("petName"),photoUrls,tags,petData.get("status"));
+		List<PetInfo> pet = new ArrayList<>();
+		pet.add(petInfo);
 		return petInfo;
 	}
 
@@ -49,18 +52,6 @@ public class PetAPISteps {
 		return res.as(PetInfo.class);
 	}
 	
-	/*public void comparePetInfo(SoftAssertions softAssertion, PetInfo expectedPetInfo, PetInfo actualPetResponse) {
-		softAssertion.assertThat(expectedPetInfo.getId()).isEqualTo(actualPetResponse.getId());
-		softAssertion.assertThat(expectedPetInfo.getName()).isEqualTo(actualPetResponse.getName());
-		softAssertion.assertThat(expectedPetInfo.getStatus()).isEqualTo(actualPetResponse.getStatus());
-		softAssertion.assertThat(expectedPetInfo.getCategory().getId()).isEqualTo(actualPetResponse.getCategory().getId());
-		softAssertion.assertThat(expectedPetInfo.getCategory().getName()).isEqualTo(actualPetResponse.getCategory().getName());
-		softAssertion.assertThat(expectedPetInfo.getTags().get(0).getId()).isEqualTo(actualPetResponse.getTags().get(0).getId());
-		softAssertion.assertThat(expectedPetInfo.getTags().get(0).getName()).isEqualTo(actualPetResponse.getTags().get(0).getName());
-		softAssertion.assertThat(expectedPetInfo.getPhotoUrls().get(0)).isEqualTo(actualPetResponse.getPhotoUrls().get(0));		
-		
-	}*/
-
 	public PetInfo fetchPetInfoById(String url,String petId) {
 		APIRequestBuilder apiRequestBuilder = new APIRequestBuilder(url + "/" + petId, "application/json", null);
 		RequestSpecification requestSpec = apiRequestBuilder.getRequestSpecification();
@@ -113,13 +104,5 @@ public class PetAPISteps {
 		return expectedResponse;
 	}
 	
-	public PetAPIResponse updatePetDataWithFormData(String url, String formData) {
-		APIRequestBuilder apiRequestBuilder = new APIRequestBuilder(url, "application/x-www-form-urlencoded", formData);
-		RequestSpecification requestSpec = apiRequestBuilder.getRequestSpecification();
-		requestSpec = RestAssured.given().spec(requestSpec);
-		Response res = requestSpec.when().post();
-		Assert.assertEquals("Status Check Passed!", 200, res.getStatusCode());	
-		return res.as(PetAPIResponse.class);
-		
-	}
+	
 }

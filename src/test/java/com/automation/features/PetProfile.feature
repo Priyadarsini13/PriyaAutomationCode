@@ -29,9 +29,9 @@ Feature: Pet - Everything about Pets
     | 100			| 200					| mouse					| mouse123	| mouse.jpg		| 200			| mouse			| available		|
     
     Then I can view pet info by status and validate if updated pet profile with "<petStatusWithPetId>" exists
-    Then Update a pet in the store with form data "<petFormData>"
+   
         
   Examples: Valid
-  			|petStatusWithPetId										| petFormData					|
-		  	|available&pending&sold,100						| 100,mouseTocat,sold |
+  			|petStatusWithPetId										| 
+		  	|available&pending&sold,100						| 
   

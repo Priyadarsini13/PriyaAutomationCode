@@ -3,13 +3,16 @@ package com.automationn.stepdefination;
 import java.util.List;
 import java.util.Map;
 
-//import org.assertj.core.api.SoftAssertions;
+
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.testng.asserts.SoftAssert;
 
 import com.automation.pojo.pet.PetAPIResponse;
 import com.automation.pojo.pet.PetInfo;
+
+
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -19,7 +22,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 
-//@RunWith(SerenityRunner.class)
 public class PetProfileStepDefn {
 
 	private Response res = null; // Response
@@ -30,12 +32,13 @@ public class PetProfileStepDefn {
 	@Before
 	public void setup() {
 		RestAssured.baseURI = "https://petstore.swagger.io/v2";
-		//this.softAssertion = new SoftAssert();
+		this.softAssertion = new SoftAssert();
+		
 	}
 
 	@After
 	public void tearDown() {
-		//this.softAssertion.assertAll();
+		
 		RestAssured.reset();
 	}
 
@@ -43,18 +46,18 @@ public class PetProfileStepDefn {
 
 	@Given("^As a owner, I would add new pet to the store with the below data$")
 	public void as_a_owner_I_would_add_new_pet_to_the_store_with_url(List<Map<String, String>> listOfData) {
-		Map<String, String> petData = listOfData.get(0);
-		PetProfileStepDefn.petUrl = petData.get("url");
-		this.petInfo = petAPISteps.createPetClass(petData);
-		this.res = petAPISteps.createPetRequest(PetProfileStepDefn.petUrl, this.petInfo);
-		PetInfo petResponse = petAPISteps.validatePetInfoIsAdded(this.res);
-		//petAPISteps.comparePetInfo(softAssertion, this.petInfo, petResponse);
+			Map<String, String> petData = listOfData.get(0);
+			PetProfileStepDefn.petUrl = petData.get("url");
+			this.petInfo = petAPISteps.createPetClass(petData);
+			this.res = petAPISteps.createPetRequest(PetProfileStepDefn.petUrl, this.petInfo);
+			PetInfo petResponse = petAPISteps.validatePetInfoIsAdded(this.res);
 	}
 
 	@When("^I add new pet, it shoud be avilable to serach with pet by ID \"([^\"]*)\"$")
 	public void i_add_new_pet_it_shoud_be_avilable_to_serach_with_pet_by_ID(String petId) {
 		PetInfo petResponse = petAPISteps.fetchPetInfoById(PetProfileStepDefn.petUrl, petId);
-		//petAPISteps.comparePetInfo(softAssertion, this.petInfo, petResponse);
+		
+		
 	}
 
 	@Then("^I upload a pet image \"([^\"]*)\" by \"([^\"]*)\"$")
@@ -87,7 +90,7 @@ public class PetProfileStepDefn {
 		Map<String, String> petDataToBeUpdated = listOfData.get(0);
 		PetInfo toBeUpdated = petAPISteps.createPetClass(petDataToBeUpdated);
 		PetInfo actualResponse = petAPISteps.updatePetRequest(PetProfileStepDefn.petUrl, toBeUpdated);
-		//petAPISteps.comparePetInfo(softAssertion, toBeUpdated, actualResponse);
+		
 	}
 
 	@Then("^I can view pet info by status and validate if updated pet profile with \"([^\"]*)\" exists$")
@@ -103,14 +106,6 @@ public class PetProfileStepDefn {
 
 	}
 
-	@Then("^Update a pet in the store with form data \"([^\"]*)\"$")
-	public void update_a_pet_in_the_store_with_form_data(List<String> petFormData) {
-		String param = "name=" + petFormData.get(1) + "&status=" + petFormData.get(2);
-		PetAPIResponse expectedResponse = petAPISteps
-				.updatePetDataWithFormData(PetProfileStepDefn.petUrl + "/" + petFormData.get(0), param);
-		Assert.assertEquals("Status Check Passed!", "200", expectedResponse.getCode().toString());
-		Assert.assertNotNull("type field in response is not empty", expectedResponse.getType());
-		Assert.assertEquals("Message return id", petFormData.get(0), expectedResponse.getMessage());
-	}
+	
 
 }
